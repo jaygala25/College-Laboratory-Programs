@@ -1,0 +1,136 @@
+#include<stdio.h>
+#include<conio.h>
+int i;
+void add(int q[],int m[])
+{
+	for(i=7;i>=0;i--)
+	{
+		if((q[i]+m[i])==1)
+		{
+			q[i]=1;
+		}
+		else
+		if((q[i]+m[i])==2)
+		{
+			q[i]=0;
+			if(i>=1)
+			{
+				q[i-1]++;
+			}
+		}
+		else
+		if((q[i]+m[i])==3)
+		{
+			q[i]=1;
+			if(i>=1)
+			{
+				q[i-1]++;
+			}
+		}
+	}
+}
+void shift(int q[])
+{
+	for(i=16;i>=1;i--)
+	{
+		q[i]=q[i-1];
+	}
+}
+void twos(int c[])
+{
+	for(i=0;i<=7;i++)
+	{
+		c[i]=c[i]^1;
+	}
+	if((c[7]+1)==1)
+	{
+		c[7]=1;
+	}
+	else
+	{
+		c[7]=0;
+		for(i=6;i>=0;i--)
+		{
+			if((c[i]+1)==2)
+			{
+				c[i]=0;
+			}
+			else
+			{
+				c[i]=1;
+				break;
+			}
+		}
+	}
+}
+void main()
+{
+	int m1,q1,m[8]={0},q[17]={0},c[8]={0},i,j,b,d;
+	clrscr();
+	printf("Enter Multiplicand(M) and Multiplier(Q) = ");
+	scanf("%d %d",&m1,&q1);
+	b=m1;
+	d=q1;
+	if(m1<0)
+	{
+		m1=(-1)*m1;
+	}
+	if(q1<0)
+	{
+		q1=(-1)*q1;
+	}
+	for(i=7;i>=0;i--)
+	{
+		m[i]=m1%2;
+		m1=m1/2;
+		q[i]=q1%2;
+		q1=q1/2;
+	}
+	for(i=0;i<=7;i++)
+	{
+		c[i]=m[i];
+	}
+	if(b<0)
+	{
+		twos(m);
+	}
+	else
+	{
+		twos(c);
+	}
+	if(d<0)
+	{
+		twos(q);
+	}
+	for(i=0;i<=7;i++)
+	{
+		q[i+8]=q[i];
+		q[i]=0;
+	}
+	q[16]=0;
+	for(i=0;i<=7;i++)
+	{
+		if((q[15]==0 && q[16]==0) || (q[15]==1 && q[16]==1))
+		{
+			shift(q);
+		}
+		else
+		if(q[15]==1 && q[16]==0)
+		{
+			add(q,c);
+			shift(q);
+		}
+		else
+		if(q[15]==0 && q[16]==1)
+		{
+			add(q,m);
+			shift(q);
+		}
+	}
+	printf("Answer in binary is = ");
+	for(i=0;i<=15;i++)
+	{
+		printf("%d",q[i]);
+	}
+	getch();
+}
